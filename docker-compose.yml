@@ -1,6 +1,26 @@
 services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    container_name: otel-collector
+    command: ["--config", "/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "4318:4318"    # OTLP HTTP
+      - "55681:55681"  # OTLP gRPC
+
   dice-roller:
     build: .
     container_name: dice-roller
     ports:
       - "8002:8002"
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318/v1/traces
+      OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+      OTEL_SERVICE_NAME: dice-roller
+    depends_on:
+      - otel-collector
+
+networks:
+  default:
+    name: otel-network
