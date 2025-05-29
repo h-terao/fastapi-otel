@@ -1,0 +1,3 @@
+# FastAPI OTel
+
+このリポジトリは、FastAPIアプリケーションにOpenTelemetryを計装する方法を個人的に学習するために作成したものです。

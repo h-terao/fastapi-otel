@@ -1,0 +1,6 @@
+services:
+  dice_roller:
+    build: .
+    container_name: dice_roller
+    ports:
+      - "8002:8002"
